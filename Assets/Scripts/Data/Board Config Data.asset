@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4088575e79d14e4c8770da455f87cf7, type: 3}
+  m_Name: Board Config Data
+  m_EditorClassIdentifier: 
+  RowCount: 7
+  ColumnCount: 8
+  CellSpacing: 0.05
+  Grid: {fileID: 7955955991357833906, guid: 410474a4881f74b3ea543c36678ee39b, type: 3}
