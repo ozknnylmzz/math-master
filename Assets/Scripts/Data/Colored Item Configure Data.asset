@@ -12,5 +12,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0712078df6e432b80d57988abb28fc, type: 3}
   m_Name: Colored Item Configure Data
   m_EditorClassIdentifier: 
-  ItemPoolSize: 0
-  ColoredItemDatas: []
+  ItemPoolSize: 250
+  ColoredItemDatas:
+  - colorType: 1
+    ItemColor: {r: 0.85882354, g: 0.8862745, b: 0.1254902, a: 1}
+    TextColor: {r: 0.4509804, g: 0.34117648, b: 0.34117648, a: 0}
+    Value: 1
+  - colorType: 2
+    ItemColor: {r: 0.8862745, g: 0.11764706, b: 0.14901961, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 2
+  - colorType: 3
+    ItemColor: {r: 0.41568628, g: 0.8980392, b: 0.84313726, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 3
+  - colorType: 4
+    ItemColor: {r: 0.20784314, g: 0.40784314, b: 1, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 4
+  - colorType: 5
+    ItemColor: {r: 0.98039216, g: 0.27450982, b: 0.7294118, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 5
+  - colorType: 6
+    ItemColor: {r: 0.2627451, g: 0.8862745, b: 0.12156863, a: 0}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 6
+  - colorType: 7
+    ItemColor: {r: 0.88235295, g: 0.6039216, b: 0.11764706, a: 1}
+    TextColor: {r: 0.35686275, g: 0.078431375, b: 0.078431375, a: 0}
+    Value: 7
+  - colorType: 8
+    ItemColor: {r: 0.6, g: 0.12156863, b: 0.8862745, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 8
+  - colorType: 9
+    ItemColor: {r: 0.8862745, g: 0.43137255, b: 0.12156863, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 0}
+    Value: 9
+  - colorType: 10
+    ItemColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 10
+  - colorType: 11
+    ItemColor: {r: 0.48235294, g: 0.6509804, b: 0.08627451, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 11
+  - colorType: 12
+    ItemColor: {r: 0.8392157, g: 0.7294118, b: 0.11372549, a: 1}
+    TextColor: {r: 0, g: 0, b: 0, a: 1}
+    Value: 12
+  - colorType: 13
+    ItemColor: {r: 0.8862745, g: 0.11764706, b: 0.54901963, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 13
+  - colorType: 14
+    ItemColor: {r: 0.12156863, g: 0.64705884, b: 0.8862745, a: 1}
+    TextColor: {r: 0, g: 0, b: 0, a: 1}
+    Value: 14
+  - colorType: 15
+    ItemColor: {r: 0.44313726, g: 0.44313726, b: 0.44313726, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 15
+  - colorType: 16
+    ItemColor: {r: 0.14901961, g: 0.12156863, b: 0.8862745, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 16
+  - colorType: 17
+    ItemColor: {r: 0.8862745, g: 0.11764706, b: 0.7882353, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 17
+  - colorType: 18
+    ItemColor: {r: 0.8901961, g: 0.59607846, b: 0.93333334, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 18
+  - colorType: 19
+    ItemColor: {r: 0.6509804, g: 0.49803922, b: 0.5764706, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 19
+  - colorType: 20
+    ItemColor: {r: 0.8862745, g: 0.41568628, b: 0.12156863, a: 1}
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    Value: 20
+  Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}

@@ -16,6 +16,7 @@ namespace Math.Boards
         private GridPosition[] _allGridPositions;
 
         public IGridSlot this[GridPosition gridPosition] => _gridSlots[gridPosition.RowIndex, gridPosition.ColumnIndex];
+        
         public IGridSlot this[int rowIndex, int columnIndex] => _gridSlots[rowIndex, columnIndex];
 
         public GridPosition[] AllGridPositions => _allGridPositions;

@@ -1,5 +1,6 @@
 using Math.Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Math.Data
 {
@@ -9,12 +10,16 @@ namespace Math.Data
         public override ContentData[] ContentDatas => ColoredItemDatas;
 
         public ColoredItemData[] ColoredItemDatas;
+        public Sprite Sprite;
     }
 
     [System.Serializable]
     public class ColoredItemData : ContentData
     {
         public ColorType colorType;
-        public Sprite Sprite;
+        
+        [FormerlySerializedAs("Color")] public Color ItemColor;
+        public Color TextColor;
+        public int Value;
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using Math.Enums;
 using Math.Items;
-using Math.Items;
 using UnityEngine;
 
 namespace Math.Data

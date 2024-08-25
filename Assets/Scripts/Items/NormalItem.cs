@@ -24,7 +24,11 @@ namespace Math.Items
         private void SetContentData(ColoredItemData itemContentData)
         {
             SetColorType(itemContentData.colorType);
-            SetSprite(itemContentData.Sprite);
+            SetSprite(_configureData.Sprite);
+            SetColor(itemContentData.ItemColor);
+            SetText(itemContentData.Value.ToString());
+            SetTextColor(itemContentData.TextColor);
+            
         }
 
     } 
