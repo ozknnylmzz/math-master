@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Math.Data;
+using Math.Items;
 using UnityEngine;
 
 namespace Math.Boards
@@ -55,11 +56,19 @@ namespace Math.Boards
             }
         }
 
+   
+
         public bool IsPointerOnBoard(Vector3 pointerWorldPos, out GridPosition gridPosition)
         {
+            // Debug.Log("pointerWorldPos"+pointerWorldPos);
             gridPosition = WorldToGridPosition(pointerWorldPos);
+           GridItem item= GetNormalItem(gridPosition);
+           item?.SetWorldPosition(pointerWorldPos);
+           // Debug.Log("item.GridPosition"+item.ItemSlot.GridPosition);
+
             return IsPositionOnBoard(gridPosition);
         }
+        
 
         public bool IsPositionInBounds(GridPosition gridPosition)
         {
@@ -74,6 +83,13 @@ namespace Math.Boards
         public bool IsPositionOnItem(GridPosition gridPosition)
         {
             return IsPositionInBounds(gridPosition) && this[gridPosition].CanContainItem;
+        }
+
+        public GridItem GetGridItem(Vector3 pointerWorldPos)
+        {
+          GridPosition  gridPosition = WorldToGridPosition(pointerWorldPos);
+            
+            return  GetNormalItem(gridPosition);
         }
 
         private GridPosition WorldToGridPosition(Vector3 pointerWorldPos)
@@ -105,6 +121,11 @@ namespace Math.Boards
             float originY = -gridHeight / 2.0f + _cellSize / 2;
 
             return new Vector3(originX, originY);
+        }
+
+        public GridItem GetNormalItem(GridPosition gridPosition)
+        {
+            return this[gridPosition].Item;
         }
 
         public IEnumerator<IGridSlot> GetEnumerator()

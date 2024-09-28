@@ -34,6 +34,11 @@ namespace Math.Items
             return GetItemWithId(ItemType.BoardItem, _possibleConfigureTypes.ChooseRandom());
         }
 
+        public GridItem GetMatchItem(ColorType colorType)
+        {
+            return GetItemWithId(ItemType.BoardItem, (int)colorType+1);
+        }
+
         public void ReturnItemToPool(GridItem item)
         {
             _itemPools[item.ItemType].ReturnToPool(item);

@@ -1,50 +1,88 @@
+using Math.Boards;
+using Math.Enums;
+using Math.Game;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-namespace Math.Input
+namespace Math.InputSytem
 {
-    public class InputController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+    public class InputController : MonoBehaviour
     {
-        private Vector3 offset;
-        private bool isDragging;
+        private GameController _gameController;
+        private GridPosition _selectedGridPosition;
+        private bool _isDragMode;
 
-        // Pointer Down Event: Obje tıklanıp sürüklemeye başlandığında
-        public void OnPointerDown(PointerEventData eventData)
+        public void Initialize(GameController gameController)
         {
-            isDragging = true;
-            // Obje ile fare arasındaki mesafeyi hesapla
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(eventData.position);
-            mousePosition.z = 0; // Z pozisyonunu sıfırlamak
-            offset = transform.position - mousePosition;
+            _gameController = gameController;
+            SubscribeEvents();
         }
 
-      
-
-        // Pointer Up Event: Obje bırakıldığında çağrılır
-        public void OnPointerUp(PointerEventData eventData)
+        private void SubscribeEvents()
         {
-            isDragging = false;
-            // Burada objeyi grid sistemine hizalama kodunu ekleyebilirsin
-            SnapToGrid();
+            EventManager<Vector2>.Subscribe(BoardEvents.OnPointerDown, OnPointerDown);
+            EventManager<Vector2>.Subscribe(BoardEvents.OnPointerUp, OnPointerUp);
+            EventManager<Vector2>.Subscribe(BoardEvents.OnPointerDrag, OnPointerDrag);
         }
 
-        // Objeyi en yakın grid pozisyonuna hizala
-        private void SnapToGrid()
+        public void UnsubscribeEvents()
         {
-            float gridSize = 1.0f; // Grid boyutu
-            float newX = Mathf.Round(transform.position.x / gridSize) * gridSize;
-            float newY = Mathf.Round(transform.position.y / gridSize) * gridSize;
-            transform.position = new Vector3(newX, newY, 0); // Z pozisyonunu sıfırla
+            EventManager<Vector2>.Unsubscribe(BoardEvents.OnPointerDown, OnPointerDown);
+            EventManager<Vector2>.Unsubscribe(BoardEvents.OnPointerUp, OnPointerUp);
+            EventManager<Vector2>.Unsubscribe(BoardEvents.OnPointerDrag, OnPointerDrag);
         }
 
-        public void OnDrag(PointerEventData eventData)
+        private void OnPointerDown(Vector2 pointerWorldPos)
         {
-            if (isDragging)
+            _isDragMode = true;
+            _gameController.SetSelectedItem(pointerWorldPos);
+            //check move etrafını kontrol eden ve hareket edıp edemıcegı sonucunu donen bool fonk yaz 
+        }
+
+        private void OnPointerDrag(Vector2 pointerWorldPos)
+        {
+            if (!_isDragMode)
+                return;
+
+            if (!_gameController.CheckMove(pointerWorldPos))
+            return;
+            
+            if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition selectedGridPosition))
             {
-                // Yeni pozisyonu hesapla
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(eventData.position);
-                mousePosition.z = 0; // Z pozisyonunu sıfırlamak
-                transform.position = mousePosition + offset; // Objenin pozisyonunu güncelle
+                _isDragMode = false;
+                return;
+            }
+
+            _selectedGridPosition = selectedGridPosition;
+        }
+
+        private void OnPointerUp(Vector2 pointerWorldPos)
+        {
+            _isDragMode = false;
+        }
+
+        // Her frame'de mobil dokunma girdilerini kontrol et
+        private void Update()
+        {
+            if (Input.touchCount > 0)
+            {
+                Touch touch = UnityEngine.Input.GetTouch(0); // İlk dokunmayı al
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began: // Dokunma başladığında
+                        OnPointerDown(touchPosition);
+                        break;
+
+                    case TouchPhase.Moved: // Dokunma hareket ederken
+                        OnPointerDrag(touchPosition);
+                        break;
+
+                    case TouchPhase.Ended: // Dokunma sonlandığında
+                    case TouchPhase.Canceled: // Dokunma iptal edildiğinde
+                        OnPointerUp(touchPosition);
+                        break;
+                }
             }
         }
     }

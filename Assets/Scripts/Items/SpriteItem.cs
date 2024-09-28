@@ -7,7 +7,8 @@ namespace Math.Items
     {
         [SerializeField] protected SpriteRenderer _spriteRenderer;
         [SerializeField] protected TextMeshProUGUI _text;
-
+        [SerializeField] protected Canvas _canvas;
+        
         private int _initialSortingOrder;
 
         protected void SetSprite(Sprite sprite)
@@ -28,6 +29,11 @@ namespace Math.Items
         protected void SetTextColor(Color color)
         {
             _text.color = color;
+        }
+        
+        protected void SetCanvas()
+        {
+            _canvas.worldCamera = FindObjectOfType<Camera>();
         }
 
         public override void Initialize()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Math.Items;
 using UnityEngine;
 
 namespace Math.Boards
@@ -18,6 +19,7 @@ namespace Math.Boards
         public bool IsPositionInBounds(GridPosition gridPosition);
 
         public bool IsPositionOnItem(GridPosition gridPosition);
+        public GridItem GetGridItem(Vector3 pointerWorldPos);
 
         public Vector3 GridToWorldPosition(GridPosition gridPosition);
     } 

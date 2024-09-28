@@ -21,7 +21,7 @@ namespace Math.Level
             _itemGenerator = itemGenerator;
             SetConfigureTypes(Constants.CONFIGURETYPES_PIECE_VALUE_4);
             GenerateItemsPool(ItemType.BoardItem);
-            await Task.Delay(2000);
+            await Task.Delay(1000);
             FillBoardWithItems();
         }
 
@@ -56,7 +56,9 @@ namespace Math.Level
         {
             // GridItem item = colorType == 4 ? _itemGenerator.GetRedNormalItem() : _itemGenerator.GetRandomNormalItem();
             GridItem item = _itemGenerator.GetRandomNormalItem();
+            item.SetBoard(_board);
             _itemGenerator.SetItemOnSlot(item, slot);
         }
+        
     }
 }

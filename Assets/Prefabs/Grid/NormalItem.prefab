@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1188355331093500257
 RectTransform:
   m_ObjectHideFlags: 0
@@ -162,7 +162,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7524631251232152320}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -170,8 +170,8 @@ RectTransform:
   - {fileID: 8327873026162132577}
   m_Father: {fileID: 7170317797469845235}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -192,7 +192,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 7170317797469845235}
   - component: {fileID: 8566582493138596679}
   - component: {fileID: 4132710514126442983}
+  - component: {fileID: 3795842847991869520}
   m_Layer: 0
   m_Name: NormalItem
   m_TagString: Untagged
@@ -338,4 +339,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 8566582493138596679}
   _text: {fileID: 4920062901473629507}
+  _canvas: {fileID: 3334176566949066751}
   _configureData: {fileID: 11400000, guid: 4614bf32134a241fda29b46bfa6fcf6b, type: 2}
+--- !u!114 &3795842847991869520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583779315196988829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3098913294a6a4a3b9ff6f2ad4e7e818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

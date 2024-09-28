@@ -7,9 +7,6 @@ namespace Math.Items
     public abstract class GridItem : MonoBehaviour
     {
         public abstract ItemType ItemType { get; }
-
-        public ItemState ItemState { get; private set; } = ItemState.Rest;
-
         public int ConfigureType { get; private set; } = 0;
 
         public abstract void ConfigureItem(int configureType);
@@ -25,6 +22,8 @@ namespace Math.Items
         public int ItemStateDelay { get; private set; } = 0;
 
         public int PathDistance { get; private set; } = 0;
+
+        public IBoard Board  { get; private set; }
 
         private ItemGenerator _generator;
 
@@ -45,11 +44,17 @@ namespace Math.Items
             _generator = generator;
         }
 
-        public void SetState(ItemState state)
+        public void SetBoard(IBoard board)
         {
-            if (ItemState == ItemState.Hide) return;
-            ItemState = state;
+            Board = board;
         }
+        
+        public void SetItemPosition(GridPosition gridPosition)
+        {
+          transform.position =  Board.GridToWorldPosition(gridPosition);
+        }
+
+     
 
         public void ReturnToPool()
         {
@@ -59,7 +64,6 @@ namespace Math.Items
         public virtual void ResetItem()
         {
             SetScale(1);
-            ItemState = ItemState.Rest;
             SetItemStateDelay(0);
         }
 
