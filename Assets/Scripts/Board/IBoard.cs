@@ -20,7 +20,8 @@ namespace Math.Boards
 
         public bool IsPositionOnItem(GridPosition gridPosition);
         public GridItem GetGridItem(Vector3 pointerWorldPos);
-
+        public GridItem GetNormalItem(GridPosition gridPosition);
+        public IGridSlot GetGridSlot(Vector3 pointerWorldPos);
         public Vector3 GridToWorldPosition(GridPosition gridPosition);
     } 
 }

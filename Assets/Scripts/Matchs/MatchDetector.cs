@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using Matc3.Matchs;
 using Math.Boards;
 using Math.Enums;
 using Math.Matchs;
 using UnityEngine;
 
-namespace Math
+namespace Math.Matchs
 {
     public class MatchDetector : IMatchDetector
     {
-
-        public MatchSequence GetMatchSequence(IBoard board, GridPosition gridPosition)
+        public ItemFallData GetDropSequence(IBoard board, GridPosition gridPosition)
         {
             throw new System.NotImplementedException();
         }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Math.Boards;
 using Math.Items;
+using Math.Matchs;
 
 namespace Math.Strategy
 {
@@ -15,6 +16,6 @@ namespace Math.Strategy
             _itemGenerator = itemGenerator;
         }
 
-        public abstract void AddFillJobs(IGridSlot matchSlot,GridItem gridItem);
+        public abstract void AddFillJobs(BoardDropItemData boardDropItemData,IGridSlot matchSlot,GridItem gridItem);
     }
 }

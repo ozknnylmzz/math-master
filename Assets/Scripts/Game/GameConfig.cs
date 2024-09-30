@@ -8,7 +8,7 @@ namespace Math.Game
         
         public void Initialize()
         {
-            MatchDataProvider = new MatchDataProvider(GetMatchDetectors());
+            MatchDataProvider = new MatchDataProvider();
         
         }
         

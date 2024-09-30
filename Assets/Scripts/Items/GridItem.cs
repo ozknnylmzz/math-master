@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Math.Enums;
 using Math.Boards;
 using UnityEngine;
@@ -54,8 +55,6 @@ namespace Math.Items
           transform.position =  Board.GridToWorldPosition(gridPosition);
         }
 
-     
-
         public void ReturnToPool()
         {
             _generator.ReturnItemToPool(this);
@@ -72,7 +71,7 @@ namespace Math.Items
             ConfigureType = configureType;
         }
 
-        protected void SetColorType(ColorType colorType)
+        public void SetColorType(ColorType colorType)
         {
             ColorType = colorType;
         }
@@ -104,6 +103,11 @@ namespace Math.Items
         public void ResetPathDistance()
         {
             PathDistance = 0;
+        }
+
+        public Tween DoMove(IGridSlot targetSlot)
+        {
+          return  transform.DOMove(targetSlot.WorldPosition, 0.5f).SetEase(Ease.Linear);
         }
     }
 }

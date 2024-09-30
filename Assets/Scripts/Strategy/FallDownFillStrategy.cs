@@ -1,28 +1,50 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Math.Boards;
 using Math.Enums;
 using Math.Items;
+using Math.Matchs;
 using Math.Strategy;
 
 namespace Math.Strategy
 {
-    public class FillStrategy : BaseFillStrategy
+    public class FallDownFillStrategy : BaseFillStrategy
     {
         private int oldColumnIndex = -1;
         private int extraRowIndex;
 
         private ItemGenerator _itemGenerator;
 
-        public FillStrategy(IBoard board, ItemGenerator itemGenerator) : base(board, itemGenerator)
+        public FallDownFillStrategy(IBoard board, ItemGenerator itemGenerator) : base(board, itemGenerator)
         {
             _itemGenerator = itemGenerator;
         }
 
-        public override void AddFillJobs(IGridSlot matchSlot,GridItem gridItem)
+        private void ShowMatch(ItemFallData itemFallData)
         {
-            GridItem matchItem = _itemGenerator.GetMatchItem(gridItem.ColorType);
-            _itemGenerator.SetItemOnSlot(matchItem,matchSlot);
+            // if (itemFallData.IsMatch)
+            // {
+            //     GridItem matchItem = _itemGenerator.GetMatchItem(itemFallData.GridItem.ColorType-1);
+            //     _itemGenerator.SetItemOnSlot(matchItem,itemFallData.TargetGridSlot);
+            // }
+        }
+
+        public override void AddFillJobs(BoardDropItemData boardDropItemData,IGridSlot matchSlot,GridItem gridItem)
+        {
+            // GridItem matchItem = _itemGenerator.GetMatchItem(gridItem.ColorType-1);
+            // _itemGenerator.SetItemOnSlot(matchItem,matchSlot);
+
+            // foreach (var dropData in boardDropItemData.DropDatas)
+            // {
+            //     dropData.DropGridSlot.Item.DoMove(dropData.TargetGridSlot).OnComplete(() => ShowMatch(dropData));
+            // }
+
+            // if (!BoardHelper.IsItemBelow(matchSlot, _board,out IGridSlot targetSlot))
+            // {
+            //     gridItem.DoMove(targetSlot);
+            // }
+
             // IEnumerable<int> fallSlotsColumnIndexes = allSlots.Select(slot => slot.GridPosition.ColumnIndex);
             // List<ItemFallData> allItemsFallData = new();
             //

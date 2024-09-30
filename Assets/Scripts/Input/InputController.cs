@@ -34,7 +34,13 @@ namespace Math.InputSytem
         private void OnPointerDown(Vector2 pointerWorldPos)
         {
             _isDragMode = true;
-            _gameController.SetSelectedItem(pointerWorldPos);
+            if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition targetGridPosition))
+            {
+                Debug.Log("board üzerinde değil");
+                _isDragMode = false;
+                return;
+            }
+             _gameController.SetSelectedItem(targetGridPosition);
             //check move etrafını kontrol eden ve hareket edıp edemıcegı sonucunu donen bool fonk yaz 
         }
 
@@ -42,25 +48,55 @@ namespace Math.InputSytem
         {
             if (!_isDragMode)
                 return;
-
-            if (!_gameController.CheckMove(pointerWorldPos))
-            return;
             
-            if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition selectedGridPosition))
+            if (!_gameController.SelectedGridItem)
             {
+                Debug.Log("_gameController.SelectedGridItem");
+                return;
+            }
+            
+            if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition targetGridPosition))
+            {
+                Debug.Log("board üzerinde değil");
                 _isDragMode = false;
                 return;
             }
-
-            _selectedGridPosition = selectedGridPosition;
+            
+            if (!_gameController.CheckMove(pointerWorldPos))
+                _isDragMode = false;
+                return;
+            
+            // if (!IsSideGrid(targetGridPosition))
+            // {
+            //     Debug.Log("board üzerinde değil");
+            //     return;
+            // }
+            
+            _selectedGridPosition = targetGridPosition;
         }
 
         private void OnPointerUp(Vector2 pointerWorldPos)
         {
+            if (!_gameController.SelectedGridItem)
+            {
+                Debug.Log("_gameController.SelectedGridItem");
+                return;
+            }
+            _gameController.SetItemToMove(pointerWorldPos);
             _isDragMode = false;
         }
+        
+        private bool IsSideGrid(GridPosition gridPosition)
+        {
+            bool isSideGrid = gridPosition.Equals(_selectedGridPosition + GridPosition.Up) ||
+                              gridPosition.Equals(_selectedGridPosition + GridPosition.Down) ||
+                              gridPosition.Equals(_selectedGridPosition + GridPosition.Left) ||
+                              gridPosition.Equals(_selectedGridPosition + GridPosition.Right);
 
-        // Her frame'de mobil dokunma girdilerini kontrol et
+            return isSideGrid;
+        }
+
+      
         private void Update()
         {
             if (Input.touchCount > 0)
@@ -85,5 +121,6 @@ namespace Math.InputSytem
                 }
             }
         }
+        
     }
 }

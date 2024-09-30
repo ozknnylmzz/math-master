@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Math.Boards;
 using Math.Items;
+using Math.Matchs;
 using Math.Strategy;
 
 namespace Match3.Strategy
@@ -14,9 +15,9 @@ namespace Match3.Strategy
             _fillStrategy = fillStrategy;
         }
 
-        public void Refill(IGridSlot matchSlot,GridItem gridItem)
+        public void Refill(BoardDropItemData boardDropItemData,IGridSlot matchSlot,GridItem gridItem)
         {
-            _fillStrategy.AddFillJobs(matchSlot,gridItem);
+            _fillStrategy.AddFillJobs(boardDropItemData,matchSlot,gridItem);
         }
 
         public void ClearAllSlots(IEnumerable<IGridSlot> allSlots,IEnumerable<GridItem> gridItems)

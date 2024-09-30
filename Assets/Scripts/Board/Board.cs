@@ -9,7 +9,7 @@ namespace Math.Boards
     public class Board : MonoBehaviour, IBoard
     {
         [SerializeField] private BoardConfigData _boardConfigData;
-        
+
         private const float _cellSize = 1f;
         private Vector3 _originPos;
 
@@ -17,7 +17,7 @@ namespace Math.Boards
         private GridPosition[] _allGridPositions;
 
         public IGridSlot this[GridPosition gridPosition] => _gridSlots[gridPosition.RowIndex, gridPosition.ColumnIndex];
-        
+
         public IGridSlot this[int rowIndex, int columnIndex] => _gridSlots[rowIndex, columnIndex];
 
         public GridPosition[] AllGridPositions => _allGridPositions;
@@ -44,7 +44,8 @@ namespace Math.Boards
                     int iteration = i * ColumnCount + j;
                     Vector3 slotPosition = GridToWorldPosition(i, j);
 
-                    GridSlot gridSlot = Instantiate(_boardConfigData.Grid, slotPosition, Quaternion.identity, transform);
+                    GridSlot gridSlot =
+                        Instantiate(_boardConfigData.Grid, slotPosition, Quaternion.identity, transform);
                     gridSlot.name = "(" + i + " , " + j + ")";
 
                     GridPosition gridPosition = new GridPosition(i, j);
@@ -56,19 +57,19 @@ namespace Math.Boards
             }
         }
 
-   
 
         public bool IsPointerOnBoard(Vector3 pointerWorldPos, out GridPosition gridPosition)
         {
-            // Debug.Log("pointerWorldPos"+pointerWorldPos);
             gridPosition = WorldToGridPosition(pointerWorldPos);
-           GridItem item= GetNormalItem(gridPosition);
-           item?.SetWorldPosition(pointerWorldPos);
-           // Debug.Log("item.GridPosition"+item.ItemSlot.GridPosition);
+            return IsPositionOnBoard(gridPosition);
+            gridPosition = WorldToGridPosition(pointerWorldPos);
+            GridItem item = GetNormalItem(gridPosition);
+            item?.SetWorldPosition(pointerWorldPos);
+            // Debug.Log("item.GridPosition"+item.ItemSlot.GridPosition);
 
             return IsPositionOnBoard(gridPosition);
         }
-        
+
 
         public bool IsPositionInBounds(GridPosition gridPosition)
         {
@@ -87,9 +88,16 @@ namespace Math.Boards
 
         public GridItem GetGridItem(Vector3 pointerWorldPos)
         {
-          GridPosition  gridPosition = WorldToGridPosition(pointerWorldPos);
+            GridPosition gridPosition = WorldToGridPosition(pointerWorldPos);
+
+            return GetNormalItem(gridPosition);
+        }
+
+        public IGridSlot GetGridSlot(Vector3 pointerWorldPos)
+        {
+            GridPosition gridPosition = WorldToGridPosition(pointerWorldPos);
             
-            return  GetNormalItem(gridPosition);
+            return GetSlot(gridPosition.RowIndex,gridPosition.ColumnIndex);
         }
 
         private GridPosition WorldToGridPosition(Vector3 pointerWorldPos)
@@ -127,6 +135,11 @@ namespace Math.Boards
         {
             return this[gridPosition].Item;
         }
+        
+        public IGridSlot GetSlot(int rowIndex,int columnIndex)
+        {
+            return this[rowIndex,columnIndex];
+        }
 
         public IEnumerator<IGridSlot> GetEnumerator()
         {
@@ -135,6 +148,7 @@ namespace Math.Boards
                 yield return slot;
             }
         }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -1,105 +1,103 @@
 using System.Collections.Generic;
-using Matc3.Matchs;
 using Math.Boards;
+using Math.Items;
 
 namespace Math.Matchs
 {
-    public class MatchDataProvider :IMatchDataProvider
+    public class MatchDataProvider : IMatchDataProvider
     {
-        private readonly IMatchDetector[] _matchDetectors;
+        private BoardDropItemData _dropDataAllSlots = new();
 
-        public MatchDataProvider(IMatchDetector[] matchDetectors)
+        public MatchDataProvider()
         {
-            _matchDetectors = matchDetectors;
         }
 
-        public BoardMatchData GetMatchData(IBoard board, params GridPosition[] gridPositions)
+        public BoardDropItemData GetMatchData(IBoard board, GridPosition selectedPosition, GridPosition targetPosition)
         {
-            MatchedDataAllSlots matchedDataAllSlots = new MatchedDataAllSlots();
+            // Selected pozisyonunu boş bırakıyoruz ve üstündeki item'ları aşağı kaydırıyoruz
+            HandleSelectedItemDrop(board, selectedPosition);
 
-            foreach (GridPosition gridPosition in gridPositions)
-            {
-                UnionSharedData(matchedDataAllSlots, gridPosition, board);
-            }
+            // Target pozisyonunda yeni bir item oluştu, bu item'ı kontrol ediyoruz
+            HandleTargetItemMatch(board, targetPosition);
 
-            return new BoardMatchData(matchedDataAllSlots.MatchDataList, matchedDataAllSlots.AllMatchedGridSlots);
+            return _dropDataAllSlots;
         }
 
-        private void UnionSharedData(MatchedDataAllSlots matchedDataAllSlots, GridPosition gridPosition,
-            IBoard board)
+        /// <summary>
+        /// Selected pozisyonundaki item boşaldığında, üstteki item'ları aşağıya kaydırır.
+        /// Her item düştüğünde, eşleşme olup olmadığını kontrol eder ve gerekiyorsa yeni eşleşmeleri işler.
+        /// </summary>
+        private void HandleSelectedItemDrop(IBoard board, GridPosition selectedPosition)
         {
-            HashSet<MatchSequence> matchSequences = GetMatchSequences(matchedDataAllSlots, gridPosition, board);
-            if (matchSequences.Count > 0)
+            // Selected pozisyonunun üstündeki item'lar sırayla aşağıya düşmeli
+            int row = selectedPosition.RowIndex - 1;
+            while (row >= 0)
             {
-                MatchData matchData = new MatchData(matchSequences);
+                GridPosition abovePosition = new GridPosition(row, selectedPosition.ColumnIndex);
+                IGridSlot aboveSlot = board[abovePosition];
+                IGridSlot targetSlot = board[selectedPosition];
+                GridItem aboveItem = board.GetNormalItem(abovePosition);
 
-                if (IsSharedMatchData(matchData, matchedDataAllSlots.MatchDataList,
-                        out List<MatchData> sharedMatchDatas))
+                // Eğer üstte bir item varsa ve alttaki slot boşsa item'ı aşağıya kaydır
+                if (aboveSlot.Item != null && targetSlot.Item == null)
                 {
-                    foreach (MatchData sharedMatchData in sharedMatchDatas)
-                    {
-                        matchedDataAllSlots.MatchDataList.Remove(sharedMatchData);
+                    ItemFallData itemFallData = new ItemFallData(aboveItem, targetSlot);
+                    _dropDataAllSlots.AddDropData(itemFallData);
 
-                        matchSequences.UnionWith(sharedMatchData.MatchedSequences);
+                    // // Üst item'i alttaki boş slot'a taşıyoruz
+                    targetSlot.SetItem(aboveSlot.Item);
+                    aboveSlot.ClearSlot();
 
-                        matchData.SetMatchDatas(matchSequences);
-                    }
+                    // Yeni düşen item'de eşleşme olup olmadığını kontrol et
+                    HandleTargetItemMatch(board, targetSlot.GridPosition);
                 }
 
-                matchedDataAllSlots.MatchDataList.Add(matchData);
+                // Bir üst satıra geçiyoruz
+                selectedPosition = abovePosition;
+                row--;
             }
         }
 
-        private HashSet<MatchSequence> GetMatchSequences(MatchedDataAllSlots matchedDataAllSlots,
-            GridPosition gridPosition, IBoard board)
+        /// <summary>
+        /// Target pozisyonuna gelen item'i kontrol eder. Eşleşme varsa, yeni eşleşmelerin üstündeki item'ları aşağı kaydırır.
+        /// </summary>
+        private void HandleTargetItemMatch(IBoard board, GridPosition targetPosition)
         {
-            HashSet<MatchSequence> matchSequences = new HashSet<MatchSequence>();
-
-            foreach (IMatchDetector matchDetector in _matchDetectors)
+            // Target pozisyonundaki item ile altındaki item arasında eşleşme olup olmadığını kontrol et
+            if (BoardHelper.IsItemBelow(board[targetPosition], board, out IGridSlot belowSlot))
             {
-                MatchSequence sequence = matchDetector.GetMatchSequence(board, gridPosition);
-
-                if (sequence == null)
+                if (board[targetPosition].Item.ColorType == belowSlot.Item.ColorType)
                 {
-                    continue;
-                }
+                    // Eşleşme var, target pozisyonuna bir drop işlemi ekle
+                    ItemFallData itemFallData = new ItemFallData(belowSlot.Item, board[targetPosition]);
+                    _dropDataAllSlots.AddDropData(itemFallData);
 
-                matchedDataAllSlots.AllMatchedGridSlots.UnionWith(sequence.MatchedGridSlots);
+                    // // Target pozisyonundaki item'i alttaki pozisyona taşı
+                    belowSlot.SetItem(board[targetPosition].Item);
 
-                matchSequences.Add(sequence);
-            }
+                    // Eşleşme sonrasında item'in ColorType'ını 1 artırıyoruz
+                    board[targetPosition].Item
+                        .SetColorType(board[targetPosition].Item.ColorType + 1); // ColorType'ı bir artırma işlemi
 
-            return matchSequences;
-        }
+                    // Target pozisyonundaki item'i temizle
+                    board[targetPosition].ClearSlot();
 
-        private bool IsSharedMatchData(MatchData currentMatchData, List<MatchData> matchDataList,
-            out List<MatchData> sharedMatchData)
-        {
-            bool isSharedFound = false;
-            sharedMatchData = new List<MatchData>();
-            foreach (MatchData matchData in matchDataList)
-            {
-                if (currentMatchData.MatchedGridSlots.Overlaps(matchData.MatchedGridSlots))
-                {
-                    sharedMatchData.Add(matchData);
-                    isSharedFound = true;
+                    // Altındaki item'den eşleşmeyi tekrar kontrol et ve zincirleme eşleşmeler için üstten item düşür
+                    HandleSelectedItemDrop(board, targetPosition);
                 }
             }
-
-            return isSharedFound;
         }
-       
     }
 
-    public class MatchedDataAllSlots
-    {
-        public List<MatchData> MatchDataList;
-        public HashSet<IGridSlot> AllMatchedGridSlots;
-
-        public MatchedDataAllSlots()
-        {
-            MatchDataList = new List<MatchData>();
-            AllMatchedGridSlots = new HashSet<IGridSlot>();
-        }
-    }
+    // public class DropDataAllSlots
+    // {
+    //     public List<BoardDropItemData> MatchDataList;
+    //     public HashSet<IGridSlot> AllMatchedGridSlots;
+    //
+    //     public DropDataAllSlots()
+    //     {
+    //         MatchDataList = new List<BoardDropItemData>();
+    //         AllMatchedGridSlots = new HashSet<IGridSlot>();
+    //     }
+    // }
 }

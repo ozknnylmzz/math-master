@@ -22,14 +22,14 @@ namespace Math.Items
             base.Kill();
         }
 
-        public void SetPositionOnBoard(Vector2 inputPosition)
-        {
-            Debug.Log("inputPosition"+inputPosition);
-            Board.IsPointerOnBoard(inputPosition, out GridPosition gridPosition);
-            Debug.Log("gridPosition"+gridPosition);
-
-            SetItemPosition(gridPosition);
-        }
+        // public void SetPositionOnBoard(Vector2 inputPosition)
+        // {
+        //     Debug.Log("inputPosition"+inputPosition);
+        //     Board.IsPointerOnBoard(inputPosition, out GridPosition gridPosition);
+        //     Debug.Log("gridPosition"+gridPosition);
+        //
+        //     SetItemPosition(gridPosition);
+        // }
 
         private void SetContentData(ColoredItemData itemContentData)
         {

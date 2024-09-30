@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Math.Boards;
 using Math.Items;
+using Math.Matchs;
 
 namespace Match3.Strategy
 {
@@ -16,18 +17,17 @@ namespace Match3.Strategy
             _boardClearStrategy = boardClearStrategy;
         }
 
-        public void CalculateMatchStrategyJobs(GridItem selectedGridItem,GridItem tarGridItem)
+        public void CalculateMatchStrategyJobs(BoardDropItemData dropItemData,GridItem selectedGridItem,GridItem targetGridItem)
         {
             _matchItems.Clear();
             _matchSlots.Clear();
 
-            _matchItems.UnionWith(new[] { selectedGridItem, tarGridItem });
-            _matchSlots.UnionWith(new[] { selectedGridItem.ItemSlot, tarGridItem.ItemSlot });
+            _matchItems.UnionWith(new[] { selectedGridItem, targetGridItem });
+            _matchSlots.UnionWith(new[] { selectedGridItem.ItemSlot, targetGridItem.ItemSlot });
 
             _boardClearStrategy.ClearAllSlots(_matchSlots,_matchItems);
-            _boardClearStrategy.Refill(tarGridItem.ItemSlot,tarGridItem);
+            _boardClearStrategy.Refill(dropItemData,targetGridItem.ItemSlot,targetGridItem);
         }
-
 
     }
 }

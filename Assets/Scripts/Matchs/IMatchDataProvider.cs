@@ -4,6 +4,6 @@ namespace Math.Matchs
 {
     public interface IMatchDataProvider
     {
-        public BoardMatchData GetMatchData(IBoard board, GridPosition[] gridPositions);
+        public BoardDropItemData GetMatchData(IBoard board, GridPosition selectedPositions,GridPosition targetPositions);
     }
 }
