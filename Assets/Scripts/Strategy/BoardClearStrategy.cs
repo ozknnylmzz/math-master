@@ -15,9 +15,9 @@ namespace Match3.Strategy
             _fillStrategy = fillStrategy;
         }
 
-        public void Refill(BoardDropItemData boardDropItemData,IGridSlot matchSlot,GridItem gridItem)
+        public void Refill(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem)
         {
-            _fillStrategy.AddFillJobs(boardDropItemData,matchSlot,gridItem);
+            _fillStrategy.AddFillJobs(selectedSlot,matchSlot,gridItem);
         }
 
         public void ClearAllSlots(IEnumerable<IGridSlot> allSlots,IEnumerable<GridItem> gridItems)

@@ -82,6 +82,8 @@ namespace Math.InputSytem
                 Debug.Log("_gameController.SelectedGridItem");
                 return;
             }
+
+          
             _gameController.SetItemToMove(pointerWorldPos);
             _isDragMode = false;
         }

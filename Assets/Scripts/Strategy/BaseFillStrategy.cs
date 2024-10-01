@@ -16,6 +16,6 @@ namespace Math.Strategy
             _itemGenerator = itemGenerator;
         }
 
-        public abstract void AddFillJobs(BoardDropItemData boardDropItemData,IGridSlot matchSlot,GridItem gridItem);
+        public abstract void AddFillJobs(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem);
     }
 }

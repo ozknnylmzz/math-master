@@ -32,18 +32,14 @@ namespace Math.Game
             return _board.IsPointerOnBoard(pointerWorldPos, out selectedGridPosition);
         }
 
-        public bool IsMatchDetected(out BoardDropItemData dropItemData, GridPosition selectedPositions,
-            GridPosition targetPositions)
+        public bool IsMatchDetected(GridPosition selectedPositions, GridPosition targetPositions)
         {
-            if (_board.GetNormalItem(selectedPositions).ColorType != _board.GetNormalItem(targetPositions).ColorType)
+            if (_board.GetNormalItem(selectedPositions)?.ColorType != _board.GetNormalItem(targetPositions)?.ColorType)
             {
-                dropItemData = null;
                 return false;
             }
 
-            dropItemData = _matchDataProvider.GetMatchData(_board, selectedPositions, targetPositions);
-
-            return dropItemData.MatchExists;
+            return true;
         }
 
         public async void SwapItemsAsync(GridPosition selectedPosition, GridPosition targetPosition)
@@ -84,10 +80,9 @@ namespace Math.Game
                 return SelectedGridItem != null && SelectedGridItem == _targetGridItem;
             }
 
-            if (IsMatchDetected(out BoardDropItemData boardDropItemData, SelectedGridItem.ItemSlot.GridPosition,
-                    _targetGridItem.ItemSlot.GridPosition))
+            if (IsMatchDetected( SelectedGridItem.ItemSlot.GridPosition, _targetGridItem.ItemSlot.GridPosition))
             {
-                _matchClearStrategy.CalculateMatchStrategyJobs(boardDropItemData, SelectedGridItem, _targetGridItem);
+                _matchClearStrategy.CalculateMatchStrategyJobs(SelectedGridItem, _targetGridItem);
                 return true;
             }
 
@@ -104,13 +99,16 @@ namespace Math.Game
             IGridSlot gridSlot = _board.GetGridSlot(pointerWorldPos);
             if (!BoardHelper.IsItemBelow(gridSlot, _board, out IGridSlot targetSlot))
             {
-                SelectedGridItem.SetItemPosition(gridSlot.GridPosition);
                 gridSlot.ClearSlot();
+                SelectedGridItem.ItemSlot.ClearSlot();
+                SelectedGridItem.SetItemPosition(gridSlot.GridPosition);
+                targetSlot.SetItem(SelectedGridItem);
                 // targetSlot.ClearSlot();
-                SelectedGridItem.DoMove(targetSlot).OnComplete((() => SetItemToMove(targetSlot.WorldPosition)));
+                SelectedGridItem?.DoMove(targetSlot).OnComplete((() => SetItemToMove(targetSlot.WorldPosition)));
             }
-            else
+            else if (!gridSlot.HasItem)
             {
+                SelectedGridItem.ItemSlot.ClearSlot();
                 gridSlot.SetItem(SelectedGridItem);
             }
         }

@@ -17,7 +17,7 @@ namespace Match3.Strategy
             _boardClearStrategy = boardClearStrategy;
         }
 
-        public void CalculateMatchStrategyJobs(BoardDropItemData dropItemData,GridItem selectedGridItem,GridItem targetGridItem)
+        public void CalculateMatchStrategyJobs(GridItem selectedGridItem,GridItem targetGridItem)
         {
             _matchItems.Clear();
             _matchSlots.Clear();
@@ -26,7 +26,7 @@ namespace Match3.Strategy
             _matchSlots.UnionWith(new[] { selectedGridItem.ItemSlot, targetGridItem.ItemSlot });
 
             _boardClearStrategy.ClearAllSlots(_matchSlots,_matchItems);
-            _boardClearStrategy.Refill(dropItemData,targetGridItem.ItemSlot,targetGridItem);
+            _boardClearStrategy.Refill(selectedGridItem .ItemSlot,targetGridItem.ItemSlot,targetGridItem);
         }
 
     }
