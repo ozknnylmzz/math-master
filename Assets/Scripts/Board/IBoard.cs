@@ -8,6 +8,8 @@ namespace Math.Boards
     {
         public int RowCount { get; }
         public int ColumnCount { get; }
+        public float LeftBoundX { get;  }
+        public float RightBoundX { get; }
 
         public IGridSlot this[GridPosition gridPosition] { get; }
         public IGridSlot this[int rowIndex, int columnIndex] { get; }
@@ -23,5 +25,9 @@ namespace Math.Boards
         public GridItem GetNormalItem(GridPosition gridPosition);
         public IGridSlot GetGridSlot(Vector3 pointerWorldPos);
         public Vector3 GridToWorldPosition(GridPosition gridPosition);
+        public float GetTopSlotY();
+        public float GetBottomSlotY();
+        public float GetLeftSlotX();
+        public float GetRightSlotX();
     } 
 }

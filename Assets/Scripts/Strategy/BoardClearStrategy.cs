@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using Math.Boards;
 using Math.Items;
 using Math.Matchs;
@@ -15,9 +16,9 @@ namespace Match3.Strategy
             _fillStrategy = fillStrategy;
         }
 
-        public void Refill(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem)
+        public Tween Refill(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem)
         {
-            _fillStrategy.AddFillJobs(selectedSlot,matchSlot,gridItem);
+          return  _fillStrategy.AddFillJobs(selectedSlot,matchSlot,gridItem);
         }
 
         public void ClearAllSlots(IEnumerable<IGridSlot> allSlots,IEnumerable<GridItem> gridItems)

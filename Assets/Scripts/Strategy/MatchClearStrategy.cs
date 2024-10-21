@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using DG.Tweening;
 using Math.Boards;
 using Math.Items;
 using Math.Matchs;
@@ -17,7 +19,7 @@ namespace Match3.Strategy
             _boardClearStrategy = boardClearStrategy;
         }
 
-        public void CalculateMatchStrategyJobs(GridItem selectedGridItem,GridItem targetGridItem)
+        public Tween CalculateMatchStrategyJobs(GridItem selectedGridItem,GridItem targetGridItem)
         {
             _matchItems.Clear();
             _matchSlots.Clear();
@@ -26,7 +28,7 @@ namespace Match3.Strategy
             _matchSlots.UnionWith(new[] { selectedGridItem.ItemSlot, targetGridItem.ItemSlot });
 
             _boardClearStrategy.ClearAllSlots(_matchSlots,_matchItems);
-            _boardClearStrategy.Refill(selectedGridItem .ItemSlot,targetGridItem.ItemSlot,targetGridItem);
+          return  _boardClearStrategy.Refill(selectedGridItem .ItemSlot,targetGridItem.ItemSlot,targetGridItem);
         }
 
     }

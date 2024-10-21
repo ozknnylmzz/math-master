@@ -10,7 +10,7 @@ namespace Math.InputSytem
         private GameController _gameController;
         private GridPosition _selectedGridPosition;
         private bool _isDragMode;
-
+        private Vector3 _limitedWorldPos;
         public void Initialize(GameController gameController)
         {
             _gameController = gameController;
@@ -54,13 +54,19 @@ namespace Math.InputSytem
                 Debug.Log("_gameController.SelectedGridItem");
                 return;
             }
+
+            if (_gameController.IsPositionInLimited(pointerWorldPos,out Vector2 limitedPosition))
+            {
+                _gameController.ItemSetPosition(limitedPosition);
+            }
             
             if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition targetGridPosition))
             {
                 Debug.Log("board üzerinde değil");
-                _isDragMode = false;
+                // _isDragMode = false;
                 return;
             }
+           
             
             if (!_gameController.CheckMove(pointerWorldPos))
                 _isDragMode = false;
@@ -82,9 +88,28 @@ namespace Math.InputSytem
                 Debug.Log("_gameController.SelectedGridItem");
                 return;
             }
+            // _gameController.SetItemToMove(pointerWorldPos);
+            if (_gameController.JobCompleted)
+            {
+                return;
+            }
 
+            if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition targetGridPosition))
+            {
+                Debug.Log("_limitedWorldPos ");
+                _gameController.IsPointerOnBoard(_limitedWorldPos, out GridPosition _limitedWorldPosition);
+               Debug.Log("_limitedWorldPosition"+_limitedWorldPosition);
+                _gameController.SetItemToMove(_limitedWorldPos);
+            }
+            else
+            {
+                Debug.Log("SetItemToMove");
+                _gameController.SetItemToMove(pointerWorldPos);
+            }
+
+            _isDragMode = false;
           
-            _gameController.SetItemToMove(pointerWorldPos);
+            // _gameController.SetItemToMove(pointerWorldPos);
             _isDragMode = false;
         }
         

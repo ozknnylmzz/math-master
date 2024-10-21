@@ -41,7 +41,7 @@ namespace Math.Matchs
                 // Eğer üstte bir item varsa ve alttaki slot boşsa item'ı aşağıya kaydır
                 if (aboveSlot.Item != null && targetSlot.Item == null)
                 {
-                    ItemFallData itemFallData = new ItemFallData(aboveItem, targetSlot);
+                    ItemFallData itemFallData = new ItemFallData(aboveItem, targetSlot,1);
                     _dropDataAllSlots.AddDropData(itemFallData);
 
                     // // Üst item'i alttaki boş slot'a taşıyoruz
@@ -69,7 +69,7 @@ namespace Math.Matchs
                 if (board[targetPosition].Item.ColorType == belowSlot.Item.ColorType)
                 {
                     // Eşleşme var, target pozisyonuna bir drop işlemi ekle
-                    ItemFallData itemFallData = new ItemFallData(belowSlot.Item, board[targetPosition]);
+                    ItemFallData itemFallData = new ItemFallData(belowSlot.Item, board[targetPosition],1);
                     _dropDataAllSlots.AddDropData(itemFallData);
 
                     // // Target pozisyonundaki item'i alttaki pozisyona taşı

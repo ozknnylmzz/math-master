@@ -32,12 +32,12 @@ namespace Math.Strategy
             // }
         }
 
-        public override void AddFillJobs(IGridSlot selectedSlot, IGridSlot matchSlot, GridItem gridItem)
+        public override Tween AddFillJobs(IGridSlot selectedSlot, IGridSlot matchSlot, GridItem gridItem)
         {
             GridItem matchItem = _itemGenerator.GetMatchItem(gridItem.ColorType - 1);
             _itemGenerator.SetItemOnSlot(matchItem, matchSlot);
-
-            DropItemsInColumn(_board, selectedSlot.GridPosition, matchSlot.GridPosition);
+            
+            return DropItemsInColumn(_board, selectedSlot.GridPosition, matchSlot.GridPosition);
 
             #region MyRegion
 
@@ -156,7 +156,7 @@ namespace Math.Strategy
         {
             Sequence dropSequence = DOTween.Sequence(); // Tüm hareketleri bir sequence'e ekleyeceğiz
             int columnIndex = selectedGridPosition.ColumnIndex;
-
+            dropSequence.Delay();
             // Yukarıdan aşağıya doğru tara
             for (int rowIndex = 0; rowIndex < board.RowCount; rowIndex++)
             {
@@ -195,15 +195,13 @@ namespace Math.Strategy
 
                         // DOMove ile item'ı animasyonla hareket ettir
                         item.transform.position = startPosition; // Başlangıç pozisyonuna geri döndür
-                        if (IsMatchItem(_board,item.ItemSlot,out IGridSlot gridSlot))
+                        if (IsMatchItem(_board, item.ItemSlot, out IGridSlot gridSlot))
                         {
                             GridItem matchItem = _itemGenerator.GetMatchItem(item.ColorType - 1);
                             _itemGenerator.SetItemOnSlot(matchItem, gridSlot);
                         }
-                        dropSequence.Append(item.transform.DOMove(targetPosition, 0.5f).OnComplete(() =>
-                        {
-                           
-                        }));
+
+                        dropSequence.Append(item.transform.DOMove(targetPosition, 0.5f).OnComplete(() => { }));
 
                         // Bir sonraki item için boş slotu güncelle
                         currentPos = new GridPosition(currentPos.RowIndex + 1, columnIndex);

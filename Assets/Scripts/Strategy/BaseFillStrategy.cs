@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using Math.Boards;
 using Math.Items;
 using Math.Matchs;
@@ -16,6 +17,6 @@ namespace Math.Strategy
             _itemGenerator = itemGenerator;
         }
 
-        public abstract void AddFillJobs(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem);
+        public abstract Tween AddFillJobs(IGridSlot selectedSlot,IGridSlot matchSlot,GridItem gridItem);
     }
 }
