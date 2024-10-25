@@ -70,6 +70,8 @@ namespace Math.Boards
             return false;
         }
         
+        
+        
         public static GridPosition CalculateSlotBasedMovement(IBoard board,GridPosition currentGridPosition, Vector2 pointerWorldPos)
         {
             // Sağdaki slotu kontrol et

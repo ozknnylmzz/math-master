@@ -40,45 +40,58 @@ namespace Math.InputSytem
                 _isDragMode = false;
                 return;
             }
-             _gameController.SetSelectedItem(targetGridPosition);
-            //check move etrafını kontrol eden ve hareket edıp edemıcegı sonucunu donen bool fonk yaz 
+            _gameController.SetSelectedItem(targetGridPosition);
+            _selectedGridPosition = targetGridPosition; // Başlangıç grid pozisyonunu kaydet
         }
+
 
         private void OnPointerDrag(Vector2 pointerWorldPos)
         {
             if (!_isDragMode)
                 return;
-            
+
             if (!_gameController.SelectedGridItem)
             {
                 Debug.Log("_gameController.SelectedGridItem");
                 return;
             }
-
-            if (_gameController.IsPositionInLimited(pointerWorldPos,out Vector2 limitedPosition))
+            
+            if (_gameController.IsPositionInLimited(pointerWorldPos, out Vector2 limitedPosition))
             {
                 _gameController.ItemSetPosition(limitedPosition);
+                _limitedWorldPos = limitedPosition;
             }
             
             if (!_gameController.IsPointerOnBoard(pointerWorldPos, out GridPosition targetGridPosition))
             {
                 Debug.Log("board üzerinde değil");
-                // _isDragMode = false;
                 return;
             }
-           
             
-            if (!_gameController.CheckMove(pointerWorldPos))
+            Vector2 inputDirection = (Vector2)_gameController.SelectedGridItem.transform.localPosition- pointerWorldPos;
+
+            if (_gameController.CheckMatch(inputDirection))
+            {
+                _gameController.SetItemToMove(pointerWorldPos);
                 _isDragMode = false;
                 return;
-            
-            // if (!IsSideGrid(targetGridPosition))
-            // {
-            //     Debug.Log("board üzerinde değil");
-            //     return;
-            // }
-            
-            _selectedGridPosition = targetGridPosition;
+            }
+          
+            // Input yönünü hesaplayalım
+
+            // Hareket kontrolü ve kilitleme işlemi
+            if (!_gameController.CheckMove(pointerWorldPos, inputDirection))
+            {
+                _isDragMode = false; // Eğer hareket yapılamazsa drag modu devre dışı bırakılır
+                return;
+            }
+
+            // Eğer yeni bir grid pozisyonuna geçtiysek, grid slot'larını güncelle
+            if (!_selectedGridPosition.Equals(targetGridPosition))
+            {
+                _gameController.UpdateGridItemPosition(_selectedGridPosition, targetGridPosition);
+                _selectedGridPosition = targetGridPosition;
+            }
         }
 
         private void OnPointerUp(Vector2 pointerWorldPos)
@@ -107,7 +120,6 @@ namespace Math.InputSytem
                 _gameController.SetItemToMove(pointerWorldPos);
             }
 
-            _isDragMode = false;
           
             // _gameController.SetItemToMove(pointerWorldPos);
             _isDragMode = false;

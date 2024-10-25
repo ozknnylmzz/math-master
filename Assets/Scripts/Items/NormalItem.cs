@@ -1,3 +1,4 @@
+using System;
 using Math.Boards;
 using Math.Data;
 using Math.Enums;
@@ -30,6 +31,14 @@ namespace Math.Items
         //
         //     SetItemPosition(gridPosition);
         // }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (ColorType==other.GetComponent<NormalItem>().ColorType)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         private void SetContentData(ColoredItemData itemContentData)
         {

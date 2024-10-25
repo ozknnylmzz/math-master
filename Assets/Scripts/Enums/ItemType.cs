@@ -10,5 +10,10 @@ namespace Math.Enums
     {
         Horizontal,
         Vertical,
-    } 
+    }
+
+    public enum EventTypes
+    {
+        IsMatch
+    }
 }

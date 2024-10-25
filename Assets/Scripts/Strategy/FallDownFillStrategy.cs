@@ -152,67 +152,68 @@ namespace Math.Strategy
 
         #endregion
 
-        private Tween DropItemsInColumn(IBoard board, GridPosition selectedGridPosition, GridPosition matchGridPosition)
+     private Tween DropItemsInColumn(IBoard board, GridPosition selectedGridPosition, GridPosition matchGridPosition)
+{
+    Sequence dropSequence = DOTween.Sequence(); // Tüm hareketleri bir sequence'e ekleyeceğiz
+    int columnIndex = selectedGridPosition.ColumnIndex;
+
+    // Yukarıdan aşağıya doğru sütunu tarıyoruz
+    for (int rowIndex = 0; rowIndex < board.RowCount; rowIndex++)
+    {
+        GridPosition currentPos = new GridPosition(rowIndex, columnIndex);
+        IGridSlot currentSlot = board[currentPos];
+
+        // Eğer slot boşsa, üstündeki item'ları alalım ve düşme işlemini başlatalım
+        if (!currentSlot.HasItem)
         {
-            Sequence dropSequence = DOTween.Sequence(); // Tüm hareketleri bir sequence'e ekleyeceğiz
-            int columnIndex = selectedGridPosition.ColumnIndex;
-            dropSequence.Delay();
-            // Yukarıdan aşağıya doğru tara
-            for (int rowIndex = 0; rowIndex < board.RowCount; rowIndex++)
+            List<GridItem> dropItems = new();
+
+            // Bu boş slotun üstündeki item'ları toplayalım (yukarıdan aşağıya sırayla)
+            for (int i = rowIndex + 1; i < board.RowCount; i++)
             {
-                GridPosition currentPos = new GridPosition(rowIndex, columnIndex);
-                IGridSlot currentSlot = board[currentPos];
+                GridPosition abovePosition = new GridPosition(i, columnIndex);
+                IGridSlot aboveSlot = board[abovePosition];
 
-                // Eğer slot boşsa, hedef slot bu slot olsun ve üstündeki item'ları listele
-                if (!currentSlot.HasItem)
+                // Eğer slotta item varsa, item'ı listeye ekle ve slotu boşalt
+                if (aboveSlot.HasItem)
                 {
-                    List<GridItem> dropItems = new();
-
-                    // Bu boş slotun üstündeki item'ları listele (yukarıdan aşağıya sırayla)
-                    for (int i = rowIndex + 1; i < board.RowCount; i++)
-                    {
-                        GridPosition abovePosition = new GridPosition(i, columnIndex);
-                        IGridSlot aboveSlot = board[abovePosition];
-
-                        if (aboveSlot.HasItem)
-                        {
-                            dropItems.Add(aboveSlot.Item); // Item'ı listeye ekle
-                            aboveSlot.ClearSlot(); // Slotu temizle
-                        }
-                    }
-
-                    // Şimdi listedeki item'ları birer alt slota kaydır
-                    foreach (GridItem item in dropItems)
-                    {
-                        // İlk boş slot (target slot) ve pozisyon
-                        IGridSlot targetSlot = board[currentPos];
-                        Vector3 startPosition =
-                            board.GridToWorldPosition(item.ItemSlot.GridPosition); // Başlangıç pozisyonu
-                        Vector3 targetPosition = board.GridToWorldPosition(targetSlot.GridPosition); // Hedef pozisyon
-
-                        // Önce item'ı set et
-                        targetSlot.SetItem(item);
-
-                        // DOMove ile item'ı animasyonla hareket ettir
-                        item.transform.position = startPosition; // Başlangıç pozisyonuna geri döndür
-                        if (IsMatchItem(_board, item.ItemSlot, out IGridSlot gridSlot))
-                        {
-                            GridItem matchItem = _itemGenerator.GetMatchItem(item.ColorType - 1);
-                            _itemGenerator.SetItemOnSlot(matchItem, gridSlot);
-                        }
-
-                        dropSequence.Append(item.transform.DOMove(targetPosition, 0.5f).OnComplete(() => { }));
-
-                        // Bir sonraki item için boş slotu güncelle
-                        currentPos = new GridPosition(currentPos.RowIndex + 1, columnIndex);
-                    }
-
-                    break; // Boş bir slot bulunduğu anda işlemi sonlandır
+                    dropItems.Add(aboveSlot.Item);
+                    aboveSlot.ClearSlot(); // Slotu boşalt
                 }
             }
 
-            return dropSequence;
+            // Listedeki item'ları sırayla birer alt slota kaydır
+            foreach (GridItem item in dropItems)
+            {
+                IGridSlot targetSlot = board[currentPos];
+                Vector3 startPosition = board.GridToWorldPosition(item.ItemSlot.GridPosition); // Başlangıç pozisyonu
+                Vector3 targetPosition = board.GridToWorldPosition(targetSlot.GridPosition); // Hedef pozisyon
+
+                // Item'ı hedef slota yerleştir
+                targetSlot.SetItem(item);
+
+                // DOMove ile item'ı animasyonla hareket ettir
+                item.transform.position = startPosition; // Başlangıç pozisyonuna geri döndür
+                dropSequence.Join(item.transform.DOMove(targetPosition, 0.25f).SetEase(Ease.InSine)); // Aynı anda item'ları hareket ettir
+
+                // Eşleşme kontrolü ve match item gösterimi
+                if (IsMatchItem(_board, targetSlot, out IGridSlot matchSlot))
+                {
+                    GridItem matchItem = _itemGenerator.GetMatchItem(item.ColorType - 1);
+                    _itemGenerator.SetItemOnSlot(matchItem, matchSlot);
+                }
+
+                // Bir sonraki item için boş slotu güncelle
+                currentPos = new GridPosition(currentPos.RowIndex + 1, columnIndex);
+            }
+
+            break; // İlk boş slot bulunduğunda işlemi sonlandırıyoruz
         }
+    }
+
+    return dropSequence;
+}
+
 
         private HashSet<GridItem> GetItemsOnColumn(IEnumerable<GridItem> allItems, int columnIndex)
         {

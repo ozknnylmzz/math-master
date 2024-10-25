@@ -27,7 +27,6 @@ namespace Match3.Strategy
             {
                 slot.Item.ReturnToPool();
                 slot.ClearSlot();
-                
             }
 
             foreach (GridItem gridItem in gridItems)
